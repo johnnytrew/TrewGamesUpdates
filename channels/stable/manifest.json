@@ -1,0 +1,12 @@
+{
+    "schemaVersion":  1,
+    "game":  "Connectopoly",
+    "channel":  "stable",
+    "version":  "6.1.5",
+    "protocolVersion":  "1",
+    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-stable-v6.1.5/Connectopoly-6.1.5-stable.zip",
+    "sha256":  "CDE21D5E1D9929217FCE17817BC1C849A5B8CC7822438241F1DA997CB7C6B653",
+    "notes":  "Initial Trew Games automatic-update baseline.",
+    "publishedUtc":  "2026-08-12T03:54:36.1823092Z",
+    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-stable-v6.1.5"
+}
