@@ -6,7 +6,7 @@
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version 2
 
-$ClientVersion='1.3.0'
+$ClientVersion='1.3.1'
 $UpdaterRoot=Join-Path $env:LOCALAPPDATA 'TrewGamesUpdater'
 $ConfigPath=Join-Path $UpdaterRoot 'config.json'
 $GameRoot=Join-Path $env:LOCALAPPDATA 'Bripardy\games\Connectopoly'
@@ -120,7 +120,10 @@ function Restore-Game([string]$Backup){
   & robocopy @args|Out-Null
 }
 function Install-Manifest($manifest,[switch]$Force){
-  if(-not(Test-Path -LiteralPath $GameRoot)){throw 'Connectopoly is not installed on this PC.'}
+  if(-not(Test-Path -LiteralPath $GameRoot)){
+    New-Item -ItemType Directory -Path $GameRoot -Force|Out-Null
+    Log 'Created a fresh Connectopoly install folder for first-time installation.'
+  }
 
   $local=Get-LocalVersion
   $remote=[string]$manifest.version
@@ -167,8 +170,12 @@ function Install-Manifest($manifest,[switch]$Force){
     $pkgMeta=Get-Content -LiteralPath $meta -Raw|ConvertFrom-Json
     if([string]$pkgMeta.version -ne $remote){throw 'The downloaded package version does not match the update manifest.'}
 
-    Write-Status 'backing-up' 'Creating recovery backup...' $remote
-    $backup=Backup-Game $local
+    if((Get-ChildItem -LiteralPath $GameRoot -Force -ErrorAction SilentlyContinue|Select-Object -First 1)){
+      Write-Status 'backing-up' 'Creating recovery backup...' $remote
+      $backup=Backup-Game $local
+    }else{
+      Log 'Fresh install detected; no pre-update backup was necessary.'
+    }
 
     Write-Status 'installing' ("Installing Connectopoly {0}..." -f $remote) $remote
     Get-ChildItem -LiteralPath $pkg -Force|ForEach-Object{
