@@ -6,8 +6,8 @@
     "protocolVersion":  "1",
     "hubVersion":  "7.2.0",
     "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-developer-v6.1.5.5/Connectopoly-6.1.5.5-developer.zip",
-    "sha256":  "BBF8070422BAFE891E191EC6C1F9455536EBF23D95FB5BBAD4B14E06FCB8F933",
-    "notes":  "Fixed Laggy Connectopoly Launch, and finilized board flip.",
-    "publishedUtc":  "2026-08-12T23:51:24.1256797Z",
+    "sha256":  "0487977F0920321ECE7DD5B58EE3A724FDCD8AB8F9D52EEA6805D3D8C3D3FD23",
+    "notes":  "Final Connectopoly polish update: Board Flip now uses synchronized rapid spins with a 30-second cooldown, improved zoom recovery, and fixed startup resolution flicker.",
+    "publishedUtc":  "2026-08-12T23:56:39.6059490Z",
     "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-developer-v6.1.5.5"
 }
