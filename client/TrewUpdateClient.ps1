@@ -6,7 +6,7 @@
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version 2
 
-$ClientVersion='1.1.0'
+$ClientVersion='1.3.0'
 $UpdaterRoot=Join-Path $env:LOCALAPPDATA 'TrewGamesUpdater'
 $ConfigPath=Join-Path $UpdaterRoot 'config.json'
 $GameRoot=Join-Path $env:LOCALAPPDATA 'Bripardy\games\Connectopoly'
@@ -15,6 +15,9 @@ $VersionPath=Join-Path $GameRoot 'TREW_VERSION.json'
 $StatusPath=Join-Path $UpdaterRoot 'status.json'
 $BackupRoot=Join-Path $env:LOCALAPPDATA 'TrewGamesBackups\AutoUpdates'
 $LogPath=Join-Path $UpdaterRoot 'updater.log'
+$HubRoot=Join-Path $env:LOCALAPPDATA 'Bripardy'
+$HubPath=Join-Path $HubRoot 'Trew Games Hub.hta'
+$PendingHubPayload=Join-Path $GameRoot 'TREW_HUB_UPDATE.hta'
 
 New-Item -ItemType Directory -Path $UpdaterRoot -Force | Out-Null
 New-Item -ItemType Directory -Path $BackupRoot -Force | Out-Null
@@ -95,6 +98,22 @@ function Backup-Game([string]$OldVersion){
   if($LASTEXITCODE -ge 8){throw 'Could not create the automatic Connectopoly backup.'}
   return $dest
 }
+function Apply-PendingHubPayload(){
+  if(-not(Test-Path -LiteralPath $PendingHubPayload)){return $false}
+  New-Item -ItemType Directory -Path $HubRoot -Force|Out-Null
+  $hubBackupDir=Join-Path $BackupRoot 'Hub'
+  New-Item -ItemType Directory -Path $hubBackupDir -Force|Out-Null
+  if(Test-Path -LiteralPath $HubPath){$stamp=Get-Date -Format 'yyyyMMdd_HHmmss';Copy-Item -LiteralPath $HubPath -Destination (Join-Path $hubBackupDir ('Trew Games Hub_'+$stamp+'.hta')) -Force}
+  $text=[IO.File]::ReadAllText($PendingHubPayload)
+  if($text -notmatch '<HTA:APPLICATION' -or $text -notmatch 'var\s+HUB_VERSION="[^"]+"'){throw 'The bundled Trew Games Hub update failed validation.'}
+  $tempHub=$HubPath+'.incoming'
+  Copy-Item -LiteralPath $PendingHubPayload -Destination $tempHub -Force
+  Move-Item -LiteralPath $tempHub -Destination $HubPath -Force
+  Remove-Item -LiteralPath $PendingHubPayload -Force -ErrorAction SilentlyContinue
+  Log 'Applied bundled Trew Games Hub update.'
+  return $true
+}
+
 function Restore-Game([string]$Backup){
   if(-not(Test-Path -LiteralPath $Backup)){return}
   $args=@($Backup,$GameRoot,'/E','/R:1','/W:1','/NFL','/NDL','/NJH','/NJS','/NP')
@@ -156,6 +175,8 @@ function Install-Manifest($manifest,[switch]$Force){
       Copy-Item -LiteralPath $_.FullName -Destination $GameRoot -Recurse -Force
     }
 
+    Apply-PendingHubPayload|Out-Null
+
     if(-not(Test-Path -LiteralPath $GameExe)){throw 'Connectopoly.exe is missing after the update.'}
     if(-not(Test-Path -LiteralPath (Join-Path $GameRoot 'server.js'))){throw 'server.js is missing after the update.'}
     if(-not(Test-Path -LiteralPath (Join-Path $GameRoot 'public\player.html'))){throw 'player.html is missing after the update.'}
@@ -207,6 +228,7 @@ function Check-SelfUpdate($cfg){
 try{
   $cfg=Get-Config
   Check-SelfUpdate $cfg
+  Apply-PendingHubPayload|Out-Null
 
   $manifest=Get-Manifest $cfg
   $local=Get-LocalVersion
