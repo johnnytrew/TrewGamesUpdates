@@ -2,12 +2,12 @@
     "schemaVersion":  1,
     "game":  "Connectopoly",
     "channel":  "stable",
-    "version":  "6.1.5.4",
+    "version":  "6.1.5.5",
     "protocolVersion":  "1",
     "hubVersion":  "7.2.0",
-    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-developer-v6.1.5.4/Connectopoly-6.1.5.4-developer.zip",
-    "sha256":  "C4123F8789BA89F14BFD67A47765EEEF9A2043E6A1B26F26682F2E1BF17A67C0",
-    "notes":  "Added synchronized Board Flip Chaos button with shared multiplayer screen flips, random 1-3 second effects, and global cooldown.",
-    "publishedUtc":  "2026-08-12T21:51:48.8519175Z",
-    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-developer-v6.1.5.4"
+    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-developer-v6.1.5.5/Connectopoly-6.1.5.5-developer.zip",
+    "sha256":  "BBF8070422BAFE891E191EC6C1F9455536EBF23D95FB5BBAD4B14E06FCB8F933",
+    "notes":  "Fixed Laggy Connectopoly Launch, and finilized board flip.",
+    "publishedUtc":  "2026-08-12T23:51:24.1256797Z",
+    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-developer-v6.1.5.5"
 }
