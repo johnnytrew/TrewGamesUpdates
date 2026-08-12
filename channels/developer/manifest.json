@@ -2,11 +2,12 @@
     "schemaVersion":  1,
     "game":  "Connectopoly",
     "channel":  "developer",
-    "version":  "6.1.5",
+    "version":  "6.1.5.1",
     "protocolVersion":  "1",
-    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-stable-v6.1.5/Connectopoly-6.1.5-stable.zip",
-    "sha256":  "CDE21D5E1D9929217FCE17817BC1C849A5B8CC7822438241F1DA997CB7C6B653",
-    "notes":  "Initial Trew Games automatic-update baseline.",
-    "publishedUtc":  "2026-08-12T03:54:36.1823092Z",
-    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-stable-v6.1.5"
+    "hubVersion":  "7.0.0",
+    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-developer-v6.1.5.1/Connectopoly-6.1.5.1-developer.zip",
+    "sha256":  "37C1DA5E2FDA676DE9FC65104B22A113E94634692E94FF0DACEB1E3605F585B3",
+    "notes":  "Trew Games Hub V7.0.0 Casino Royale redesign with new premium casino interface and automatic Hub update delivery.",
+    "publishedUtc":  "2026-08-12T04:33:21.9759408Z",
+    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-developer-v6.1.5.1"
 }
