@@ -2,12 +2,12 @@
     "schemaVersion":  1,
     "game":  "Connectopoly",
     "channel":  "developer",
-    "version":  "6.1.5.2",
+    "version":  "6.1.5.3",
     "protocolVersion":  "1",
-    "hubVersion":  "7.0.0",
-    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-developer-v6.1.5.2/Connectopoly-6.1.5.2-developer.zip",
-    "sha256":  "440E3FA65758B22E69BD848049BD3C8AEE946EC17F0BFCBA130C25C0C8C00D5A",
-    "notes":  "Patch",
-    "publishedUtc":  "2026-08-12T05:26:40.8894373Z",
-    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-developer-v6.1.5.2"
+    "hubVersion":  "7.1.2",
+    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-developer-v6.1.5.3/Connectopoly-6.1.5.3-developer.zip",
+    "sha256":  "5D24525209C944023841ADE59C0E85F88885D6927A7E464B6C039E01733DD4F9",
+    "notes":  "New UI!",
+    "publishedUtc":  "2026-08-12T17:15:36.7074925Z",
+    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-developer-v6.1.5.3"
 }
