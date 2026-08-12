@@ -1,0 +1,46 @@
+<html>
+<head>
+<HTA:APPLICATION ID="TrewUpdateCenter" APPLICATIONNAME="Trew Update Center" BORDER="thin" CAPTION="yes" SHOWINTASKBAR="yes" SINGLEINSTANCE="yes" WINDOWSTATE="normal"/>
+<title>Trew Games Update Center</title>
+<style>
+html,body{margin:0;height:100%;font-family:Segoe UI;background:#07130f;color:#edf3e9}
+.wrap{padding:24px}.card{background:#0d281e;border:1px solid #5c4a22;border-radius:14px;padding:18px;margin-top:14px}
+.title{font-size:26px;font-weight:800;color:#f1d77f}.sub{color:#9fb6a8;margin-top:4px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+button{border:1px solid #a88639;border-radius:9px;padding:11px 16px;background:#15442f;color:#fff4c9;font-weight:800;cursor:pointer}
+button:hover{background:#1d5a3d}.tiny{font-size:12px;color:#88a294;margin-top:10px}
+</style>
+<script>
+var sh=new ActiveXObject("WScript.Shell");
+var root=sh.ExpandEnvironmentStrings("%LOCALAPPDATA%")+"\\TrewGamesUpdater\\";
+function run(args,show){sh.Run('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "'+root+'TrewUpdateClient.ps1" '+args,show?1:0,false);}
+function channel(c){sh.Run('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "'+root+'Set-TrewChannel.ps1" '+c,1,true);alert("Channel changed to "+c+".");}
+</script>
+</head>
+<body>
+<div class="wrap">
+<div class="title">TREW GAMES UPDATE CENTER</div>
+<div class="sub">Connectopoly updates, repair tools, and release channels.</div>
+
+<div class="card">
+<b>UPDATE &amp; REPAIR</b>
+<div class="row">
+<button onclick="run('-Mode Status',true)">CHECK STATUS</button>
+<button onclick="run('-Mode Update',true)">UPDATE NOW</button>
+<button onclick="run('-Mode Repair',true)">VERIFY &amp; REPAIR</button>
+</div>
+<div class="tiny">Updates are SHA-256 verified and backed up automatically before installation.</div>
+</div>
+
+<div class="card">
+<b>UPDATE CHANNEL</b>
+<div class="row">
+<button onclick="channel('stable')">STABLE</button>
+<button onclick="channel('beta')">BETA</button>
+<button onclick="channel('developer')">DEVELOPER</button>
+</div>
+<div class="tiny">Stable is recommended for friends. Developer receives your newest test builds.</div>
+</div>
+</div>
+</body>
+</html>
