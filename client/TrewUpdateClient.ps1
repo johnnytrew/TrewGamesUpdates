@@ -6,7 +6,7 @@
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version 2
 
-$ClientVersion='1.3.1'
+$ClientVersion='1.4.0'
 $UpdaterRoot=Join-Path $env:LOCALAPPDATA 'TrewGamesUpdater'
 $ConfigPath=Join-Path $UpdaterRoot 'config.json'
 $GameRoot=Join-Path $env:LOCALAPPDATA 'Bripardy\games\Connectopoly'
@@ -18,6 +18,7 @@ $LogPath=Join-Path $UpdaterRoot 'updater.log'
 $HubRoot=Join-Path $env:LOCALAPPDATA 'Bripardy'
 $HubPath=Join-Path $HubRoot 'Trew Games Hub.hta'
 $PendingHubPayload=Join-Path $GameRoot 'TREW_HUB_UPDATE.hta'
+$PendingSharedPayload=Join-Path $GameRoot 'TREW_SHARED_UPDATE.zip'
 
 New-Item -ItemType Directory -Path $UpdaterRoot -Force | Out-Null
 New-Item -ItemType Directory -Path $BackupRoot -Force | Out-Null
@@ -114,6 +115,35 @@ function Apply-PendingHubPayload(){
   return $true
 }
 
+
+function Apply-PendingSharedPayload(){
+  if(-not(Test-Path -LiteralPath $PendingSharedPayload)){return $false}
+  $stamp=Get-Date -Format 'yyyyMMdd_HHmmss'
+  $sharedBackup=Join-Path $BackupRoot ('Shared_'+$stamp)
+  $work=Join-Path $env:TEMP ('TrewSharedUpdate_'+[guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $sharedBackup,$work -Force|Out-Null
+  try{
+    Expand-Archive -LiteralPath $PendingSharedPayload -DestinationPath $work -Force
+    $allowed=@('Bripardy.hta','games\TrewFeud\TrewFeud Host.hta')
+    foreach($rel in $allowed){
+      $src=Join-Path $work $rel
+      if(-not(Test-Path -LiteralPath $src)){throw ('Shared update is missing '+$rel)}
+      $dest=Join-Path $HubRoot $rel
+      $destDir=Split-Path -Parent $dest
+      New-Item -ItemType Directory -Path $destDir -Force|Out-Null
+      if(Test-Path -LiteralPath $dest){
+        $backupPath=Join-Path $sharedBackup $rel
+        New-Item -ItemType Directory -Path (Split-Path -Parent $backupPath) -Force|Out-Null
+        Copy-Item -LiteralPath $dest -Destination $backupPath -Force
+      }
+      Copy-Item -LiteralPath $src -Destination $dest -Force
+    }
+    Remove-Item -LiteralPath $PendingSharedPayload -Force -ErrorAction SilentlyContinue
+    Log 'Applied bundled Bripardy/TrewFeud shared update.'
+    return $true
+  }finally{Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue}
+}
+
 function Restore-Game([string]$Backup){
   if(-not(Test-Path -LiteralPath $Backup)){return}
   $args=@($Backup,$GameRoot,'/E','/R:1','/W:1','/NFL','/NDL','/NJH','/NJS','/NP')
@@ -183,6 +213,7 @@ function Install-Manifest($manifest,[switch]$Force){
     }
 
     Apply-PendingHubPayload|Out-Null
+    Apply-PendingSharedPayload|Out-Null
 
     if(-not(Test-Path -LiteralPath $GameExe)){throw 'Connectopoly.exe is missing after the update.'}
     if(-not(Test-Path -LiteralPath (Join-Path $GameRoot 'server.js'))){throw 'server.js is missing after the update.'}
@@ -236,6 +267,7 @@ try{
   $cfg=Get-Config
   Check-SelfUpdate $cfg
   Apply-PendingHubPayload|Out-Null
+  Apply-PendingSharedPayload|Out-Null
 
   $manifest=Get-Manifest $cfg
   $local=Get-LocalVersion
