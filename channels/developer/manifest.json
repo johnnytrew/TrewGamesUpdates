@@ -2,12 +2,12 @@
     "schemaVersion":  1,
     "game":  "Connectopoly",
     "channel":  "developer",
-    "version":  "6.1.5.6",
+    "version":  "6.1.5.7",
     "protocolVersion":  "1",
     "hubVersion":  "7.2.0",
-    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-developer-v6.1.5.6/Connectopoly-6.1.5.6-developer.zip",
-    "sha256":  "C39E9B03357AA11BE5AB549ED144E04334B843B0AA9CABD24CABB45888DC9082",
-    "notes":  "Better houses and hotels, finalized synchronized Board Spin with 30-second cooldown, improved zoom recovery, and fixed startup display flicker.",
-    "publishedUtc":  "2026-08-13T00:43:35.2803822Z",
-    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-developer-v6.1.5.6"
+    "packageUrl":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/download/connectopoly-developer-v6.1.5.7/Connectopoly-6.1.5.7-developer.zip",
+    "sha256":  "4392F97F5B79D785D2BEAAFF3DEDF217E40E46B7B3762DA8DF3AEFAFB069AB33",
+    "notes":  "Uodate House UI",
+    "publishedUtc":  "2026-08-13T02:12:02.5379204Z",
+    "releasePage":  "https://github.com/johnnytrew/TrewGamesUpdates/releases/tag/connectopoly-developer-v6.1.5.7"
 }
