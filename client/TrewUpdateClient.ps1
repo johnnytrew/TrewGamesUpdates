@@ -6,7 +6,7 @@
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version 2
 
-$ClientVersion='1.4.0'
+$ClientVersion='1.4.1'
 $UpdaterRoot=Join-Path $env:LOCALAPPDATA 'TrewGamesUpdater'
 $ConfigPath=Join-Path $UpdaterRoot 'config.json'
 $GameRoot=Join-Path $env:LOCALAPPDATA 'Bripardy\games\Connectopoly'
@@ -40,6 +40,51 @@ function Write-Status([string]$State,[string]$Message,[string]$Version=''){
       time=(Get-Date).ToUniversalTime().ToString('o')
     }|ConvertTo-Json|Set-Content -LiteralPath $StatusPath -Encoding UTF8
   }catch{}
+}
+function Ensure-HiddenUpdateTask(){
+  try{
+    $taskName='Trew Games Automatic Update Check'
+    $hiddenRunner=Join-Path $UpdaterRoot 'TrewUpdateCheckHidden.vbs'
+    $runnerText=@'
+Option Explicit
+
+Dim shell, files, updaterRoot, scriptPath, command
+Set shell = CreateObject("WScript.Shell")
+Set files = CreateObject("Scripting.FileSystemObject")
+
+updaterRoot = files.GetParentFolderName(WScript.ScriptFullName)
+scriptPath = files.BuildPath(updaterRoot, "TrewUpdateClient.ps1")
+command = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File """ _
+    & scriptPath & """ -Mode Check -Quiet"
+
+shell.Run command, 0, True
+'@
+    $enc=New-Object System.Text.UTF8Encoding($false)
+    if(-not(Test-Path -LiteralPath $hiddenRunner) -or [IO.File]::ReadAllText($hiddenRunner) -ne $runnerText){
+      [IO.File]::WriteAllText($hiddenRunner,$runnerText,$enc)
+    }
+
+    $scheduler=New-Object -ComObject 'Schedule.Service'
+    $scheduler.Connect()
+    $folder=$scheduler.GetFolder('\')
+    $task=$folder.GetTask('\'+$taskName)
+    $definition=$task.Definition
+    $expectedPath=Join-Path $env:WINDIR 'System32\wscript.exe'
+    $expectedArgs='"'+$hiddenRunner+'"'
+    $alreadyFixed=$definition.Actions.Count -eq 1 -and
+      [string]$definition.Actions.Item(1).Path -ieq $expectedPath -and
+      [string]$definition.Actions.Item(1).Arguments -eq $expectedArgs
+    if(-not$alreadyFixed){
+      $definition.Actions.Clear()
+      $action=$definition.Actions.Create(0)
+      $action.Path=$expectedPath
+      $action.Arguments=$expectedArgs
+      $folder.RegisterTaskDefinition($taskName,$definition,6,$null,$null,3,$null)|Out-Null
+      Log 'Migrated automatic update task to the windowless launcher.'
+    }
+  }catch{
+    Log ('Hidden update-task migration skipped: '+$_.Exception.Message)
+  }
 }
 function Get-Config(){
   if(-not(Test-Path -LiteralPath $ConfigPath)){throw 'Trew Games Updater is not configured on this PC.'}
@@ -265,6 +310,7 @@ function Check-SelfUpdate($cfg){
 
 try{
   $cfg=Get-Config
+  Ensure-HiddenUpdateTask
   Check-SelfUpdate $cfg
   Apply-PendingHubPayload|Out-Null
   Apply-PendingSharedPayload|Out-Null
