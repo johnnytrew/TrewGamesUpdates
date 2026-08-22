@@ -1,5 +1,5 @@
 {
-    "version":  "1.4.0",
-    "scriptUrl":  "https://raw.githubusercontent.com/johnnytrew/TrewGamesUpdates/main/client/TrewUpdateClient.ps1",
-    "sha256":  "DE897C6ABAB60F7817B96E824AB8039AE60666A2FB7363D3EB49E407A562D2FE"
+  "version": "1.4.1",
+  "scriptUrl": "https://raw.githubusercontent.com/johnnytrew/TrewGamesUpdates/main/client/TrewUpdateClient.ps1",
+  "sha256": "17D383470CD37EBE75F7F112BB38F245AB720786D5B29CAF46283326545929E9"
 }
